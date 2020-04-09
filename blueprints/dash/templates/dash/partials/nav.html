@@ -1,29 +1,23 @@
 
 <nav class='nav'>
-    <a class="nav-logo" href="#" style="font-family: monospace !important;"><h5 style='font-weight:bold;'>PyVid</h5></a>
+    <a class="nav-logo" href="/" style="font-family: monospace !important;"><h5 style='font-weight:bold;text-shadow: 3px 4px 5px gray'>pycdv</h5></a>
     <a style='color:rgb(0, 55, 100);'>|</a>
     {% if request.path == "/dash" or request.path == "/" %}
-        <a class="nv-link" href="#" style="color: rgb(0, 55, 100) !important;">Tab1</a>          
+        <a class="nv-link" href="/" style="color: rgb(0, 55, 100) !important;border-top: 2px solid rgb(0, 55, 100)">Dash</a>          
     {% else %}
-        <a class="nv-link" href="#">Tab1</a>          
+        <a class="nv-link" href="/">Dash</a>          
     {% endif %}
 
-    {% if request.path == "/coverage" %}
-        <a class="nv-link" href="#" style="color: rgb(0, 55, 100) !important;">Tab2</a>
+    {% if request.path == "/tab2" %}
+        <a class="nv-link" href="/tab2" style="color: rgb(0, 55, 100) !important;border-top: 2px solid rgb(0, 55, 100)">Coverage</a>
     {% else %}
-        <a class="nv-link" href="#">Tab2</a>          
+        <a class="nv-link" href="/tab2">Coverage</a>          
     {% endif %}
 
-    {% if request.path == "/ventilaid"  %}
-        <a class="nv-link" href="#" style="color: rgb(0, 55, 100) !important;">Tab3</a>
+    {% if request.path == "/tab3"  %}
+        <a class="nv-link" href="/tab3" style="color: rgb(0, 55, 100) !important;border-top: 2px solid rgb(0, 55, 100)">Assist</a>
     {% else %}
-        <a class="nv-link" href="#">Tab3</a>          
-    {% endif %}
-
-    {% if request.path == "/donate" %}
-        <a class="nv-link" href="#" style="color: rgb(0, 55, 100) !important;">Tab4</a>
-    {% else %}
-        <a class="nv-link" href="#">Tab4</a>          
+        <a class="nv-link" href="/tab3">Assist</a>          
     {% endif %}
 
 </nav>

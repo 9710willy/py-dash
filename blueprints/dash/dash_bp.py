@@ -4,9 +4,12 @@ from flask import Blueprint, render_template, url_for, current_app
 from .models import Data
 # Import db instance of our app
 from .. import db
-import json
+import json, csv
 import requests
 import urllib.request as request
+import os
+
+from blueprints.tab3.tab3_bp import tab3_bp
 
 # Dash Blueprint Creation
 dash_bp = Blueprint('dash_bp', __name__,
@@ -270,11 +273,57 @@ def index():
     getUrlAll = "https://api.covid19api.com/all"
     getUrlSum = "https://api.covid19api.com/summary"
 
+    tab3_url = url_for('tab3_bp.index')
+
     # response_all = requests.get(getUrlAll)
     response_sum = requests.get(getUrlSum)
-   
     # all_data = json.loads(response_all.text)
     sum_data = json.loads(response_sum.text)
+    # covidpath = os.path.abspath("covid-19-data")
+    csv_file_path = os.path.abspath(".") + "/blueprints/dash/templates/dash/covid-19-data/us-counties.csv"
+    json_file_path = os.path.abspath(".") + "/blueprints/dash/templates/dash/covid-19-data/us-counties.json"
 
+    #csv_file_path = "var/www/html/py-dash/blueprints/dash/templates/dash/covid-19-data/us-counties.csv"
+    #json_file_path = "var/www/html/py-dash/blueprints/dash/templates/dash/covid-19-data/us-counties.json"
+    data = []
+
+    # convert csv into array dict format
+    with open(csv_file_path, encoding='utf-8') as csvFile:
+        csvReader = csv.DictReader(csvFile)
+        counter = 0
+        assign = 0
+        for rows in csvReader:
+            x = {}
+            for key,val in rows.items():
+                if assign == 0:
+                    x["date"] = val
+                elif assign == 1:
+                    x["county"] = val
+                elif assign == 2:
+                    x["state"] = val
+                elif assign == 3:
+                    x["fips"] = val
+                elif assign == 4:
+                    x["cases"] = val
+                elif assign == 5:
+                    x["deaths"] = val
+                assign+=1
+            data.append(x)
+            counter+=1
+            assign = 0
+
+    # convert data array to json file
+    with open(json_file_path, 'w') as jsonFile:
+        jsonFile.write(json.dumps(data, indent=4))
     # return html template to browser with covid summary data
     return render_template('dash/dash.html', data = sum_data, cc = country_codes)
+
+
+# get counties json
+@dash_bp.route('/counties')
+def getcounties():
+    
+    return render_template('/dash/covid-19-data/us-counties.json')
+	
+	
+	

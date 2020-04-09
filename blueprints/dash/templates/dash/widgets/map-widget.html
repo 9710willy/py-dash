@@ -5,64 +5,68 @@
     <span>|</span>
     <p class='map-tab' id='us-tab' style='background-color:whitesmoke;border: 1px solid lightgray;'>US Map</p>
     <span>|</span>
-    <p class='map-tab' id='loc-tab' style='background-color:whitesmoke;border: 1px solid lightgray;'>My Location</p>
+    <p class='map-tab' id='county-tab' style='background-color:whitesmoke;border: 1px solid lightgray;'>US County</p>
+    <input id="search" onkeyup="searchIt()" type="text" placeholder="Search country...">
+    <div id="search-results" style='background-color: white;;'>
+
+    </div>
+    <img id="search-icon" src="{{ url_for('dash_bp.static', filename='images/search1.png') }}" alt="Search" style='width: 20px; height:20px'>
+    <a id="map-icon"><img  id='mapic' src="{{ url_for('dash_bp.static', filename='images/map.png') }}" alt="Search" style='width: 25px; height:25px'></a>
+    
     <div class="country-info">
-        <h5 class='country-title' style='color:#005EAA;'></h5>
-        <a class='close-cinfo' style='position:absolute; top:0; right:5px;color:#005EAA;cursor:pointer;font-weight: bold;'>x</a>
+        <p class='country-title' style='color:#005EAA;font-size:14px;font-weight:bold;'></p><br>
         <p>Total Cases: <span class='map-total'></span></p><br>
-        <p>New Cases: <span class='map-new'></span></p>
-        <button class="btn btn-primary" style='background-color:#005EAA;border-color:#005EAA;'>Coverage</button>
+        <div style='border-bottom: 1px solid lightgray'></div>
+        <p id='mn'>New Cases: <span class='map-new'></span></p><br>
+        <div style='border-bottom: 1px solid lightgray'></div>
+        <p>Total Deaths: <span class='map-totaldeaths'></span></p><br>
+        <div style='border-bottom: 1px solid lightgray'></div>
+        <p id='nd'>New Deaths: <span class='map-newdeaths'></span></p><br>
+        <button class="btn btn-primary" style='background-color:#005EAA;border-color:#005EAA;position:absolute;bottom:3px;width:97%;left:3px;'>Coverage</button>
+    </div>
+
+    <div class="county-info">
+        <p class='county-title' style='color:#005EAA;font-size:14px;font-weight:bold;'></p><br>
+        <p>Total Cases: <span class='county-total'></span></p><br>
+        <div style='border-bottom: 1px solid lightgray'></div>
+        <p>Total Deaths: <span class='county-totaldeaths'></span></p><br>
+        <div style='border-bottom: 1px solid lightgray'></div>
+        <button class="btn btn-primary" style='background-color:#005EAA;border-color:#005EAA;position:absolute;bottom:3px;width:97%;left:3px;'>Coverage</button>
     </div>
 
     <div class='covid-legend'>
-        <p style='margin:0px; padding:0px;font-size: 12px;font-weight: bold; background:none;text-shadow:2px 2px 2px rgb(128, 128, 128);'>Total # Cases</p>
-        <span style='color:lightgray;margin-left:20px;'>------------------------------------------------</span>
+        <p style='margin:0px; padding:0px;font-size: 14px;font-weight: bold; background:none;'>Reported Cases</p>
         <div class="row">
             <div class="col">
-                <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: red;border: 1px solid darkred;'>>50000</p>
+                <p class='highest' style='color:white; font-size: 12px;;padding:3px;margin:0px;background-color: red;border: 1px solid darkred;font-weight:bold;'>>50000</p>
             </div>
             <div class="col">
-                <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: orange;border: 1px solid darkorange'>50000-10001</p>
+                <p class='higher' style='color:white; font-size: 12px;font-weight: bold;padding:3px;margin:0px;background-color: orange;border: 1px solid darkorange'>50000-10001</p>
             </div>
             <div class="col">
-                <p style='color:black; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: yellow; border: 1px solid gold;'>10000-1001</p>
+                <p class='high' style='color:black; font-size: 12px;font-weight: bold;padding:3px;margin:0px;background-color: yellow; border: 1px solid gold;'>10000-1001</p>
             </div>
             <div class="col">
-                <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color:darkblue; border:1px solid navy'>1000-101</p>
+                <p class='mid' style='color:white; font-size: 12px;font-weight: bold;padding:3px;margin:0px;background-color:darkblue; border:1px solid navy'>1000-101</p>
             </div>
             <div class="col">
-                <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: green;border: 1px solid darkgreen'>100-1</p>
+                <p class='low' style='color:white; font-size: 12px;font-weight: bold;padding:3px;margin:0px;background-color: green;border: 1px solid darkgreen;'>100-1</p>
             </div>
             <div class="col">
-                <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: lightgreen;border: 1px solid green;'>0</p>
+                <p class='lowest' style='color:black; font-size: 12px;font-weight: bold;padding:3px;margin:0px;background-color: white;border: 1px solid lightgray;'>0</p>
             </div>
-
         </div>
     </div>
 
     <div class='sdlegend'>
-      <p style='margin:0px;color:white; padding:0px;font-size: 12px;font-weight: bold; background:none;text-shadow:2px 2px 2px rgb(128, 128, 128);'>Total#Cases</p><br>
-      
-      <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: red;border: 1px solid darkred;  '>>50000</p><br>
-
-      <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: orange;border: 1px solid darkorange'>50000-10001</p><br>
-
-   
-      <p style='color:black; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: yellow; border: 1px solid orange;'>10000-1001</p><br>
-
-   
-      <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color:darkblue; border:1px solid navy'>1000-101</p><br>
-
-   
-      <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: green;border: 1px solid darkgreen'>100-1</p><br>
-
-   
-      <p style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: lightgreen;border: 1px solid green;'>0</p>
-
-
+      <p style='margin:0px;color:white; padding:0px;font-size: 10px;font-weight: bold; background:none;text-shadow:2px 2px 2px rgb(105, 105, 105);'>Reported Cases</p><br>
+      <p class='highest'style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: red;border: 1px solid darkred;  '>>50000</p><br>
+      <p class='higher'style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: orange;border: 1px solid darkorange'>50000-10001</p><br>
+      <p class='high'style='color:black; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: yellow; border: 1px solid orange;'>10000-1001</p><br>
+      <p class='mid'style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color:darkblue; border:1px solid navy'>1000-101</p><br>
+      <p class='low'style='color:white; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: green;border: 1px solid darkgreen'>100-1</p><br>
+      <p class='lowest'style='color:black; font-size: 12px;font-weight: normal;padding:3px;margin:0px;background-color: white;border: 1px solid lightgray;'>0</p>
    </div>
    
-
-
     <div id='map'></div>
 </div>
