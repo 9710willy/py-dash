@@ -1,29 +1,16 @@
-
-//api for testing
-const api_url_us = 'https://api.covid19api.com/total/country/united-states/status/confirmed';
-
-// api url for country list
-const country_api = 'https://api.covid19api.com/countries';
-
-//append country slug & condition string
-var cases_active = "https://api.covid19api.com/country/" ;
-const confirmed = "/status/confirmed";
-const recovered = "/status/recovered";
-const deaths = "/status/deaths";
-
 window.addEventListener('load', setup);
 
-function setup(){
+async function setup(){
     const ctx = document.getElementById('myChart').getContext('2d');
-    const US_cases = getData();
+    const World= await getData();
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: US_cases.dates,
+        labels: World.dates,
         datasets: [
           {
-            label: 'Cases in the United States',
-            data: US_cases.cases,
+            label: 'Confirmed Cases',
+            data: World.cases_sum,
             fill: false,
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -31,38 +18,59 @@ function setup(){
           }
         ]
       },
-      options: {}
+      options: {
+          title: {
+            display: true,
+            text: 'Confirmed Cases (World)'
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      }
     });
   }
-  
-  function getData() {
-    const response = fetch(api_url_us);
-    const data_us = response.json();
-    const dates = [];
-    const cases = [];
-  
-    Object.entries(data_us).forEach(([key, value]) => {
-          if(key == "Date")
-          {
-              dates.push(value.substring(5,10));
-          }
-          else if(key == "Cases")
-          {
-              cases.push([value]);
-          }
-      });
-      return {dates, cases};
-  }
+  //get data from csv
+  async function getData() {
+    const response = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
+    var data = await response.text();
 
-// Select map tab
-$(".graph-tab").click(function(){
-    $(".graph-tab").css("background-color", "whitesmoke");
-    $(this).css("background-color", "rgb(211, 211, 211)");
- 
-    if($(this).text() == "Linear"){
- 
-    }else if($(this).text() == "Logarithmic"){
+    const dates = [];
+    var cases_sum = [];
+    const first_row = data.split('\n')[0].split(',');
+
+    for(var i = 4; i < first_row.length; ++i)
+    {
+      var date = first_row[i].substring(0,4);
+      if(date[date.length-1] == '/') { date = date.substring(0,3); }
+      dates.push(date);
     }
 
- });
+    const second_row = data.split('\n').slice(1)[0].split(',');
 
+    for(var i = 4; i < second_row.length; ++i)
+    {
+      cases_sum.push(parseInt(second_row[i]));
+    }
+
+    const rows_after_two = data.split('\n').slice(2);
+    for(var i = 0; i < rows_after_two.length; ++i)
+    {
+      const cols = rows_after_two[i].split(',');
+      for(var j = 4; j < cols.length; ++j)
+      {
+        cases_sum[j] += parseInt(cols[j]);
+      }
+    }
+
+    return {dates, cases_sum};
+  }
+
+// //Select map tab (implement later)
+// $(".graph-tab").click(function(){
+//     $(".graph-tab").css("background-color", "whitesmoke");
+//     $(this).css("background-color", "rgb(211, 211, 211)");
+ 
+//     if($(this).text() == "Linear"){
+ 
+//     }else if($(this).text() == "Logarithmic"){
+//     }
+//  });

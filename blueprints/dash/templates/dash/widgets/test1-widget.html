@@ -1,59 +1,11 @@
 <!-- Test1 Widget -->
 <div class='wid'>
     <div class='widget-tool'>...</div>
-    <p class='graph-tab' id='linear-tab' style='margin-left:10px;margin-bottom:0px !important;border:1px solid lightgray; background-color:lightgray;'>Linear</p>
+    <!-- <p class='graph-tab' id='linear-tab' style='margin-left:10px;margin-bottom:0px !important;border:1px solid lightgray; background-color:lightgray;'>Linear</p>
     <span>|</span>
-    <p class='graph-tab' id='logarithmic-tab' style='background-color:whitesmoke;border: 1px solid lightgray;'>Logarithmic</p>
+    <p class='graph-tab' id='logarithmic-tab' style='background-color:whitesmoke;border: 1px solid lightgray;'>Logarithmic</p> -->
+    <p style='margin-left:10px;'>Confirmed Cases</p>
     <div>
         <canvas id="myChart" width="400" height="400"></canvas>
-        <!-- <script>
-            window.addEventListener('load', setup);
-
-            function setup(){
-                const ctx = document.getElementById('myChart').getContext('2d');
-                const US_cases = getData();
-                const myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: US_cases.dates,
-                    datasets: [
-                    {
-                        label: 'Cases in the United States',
-                        data: US_cases.cases,
-                        fill: false,
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                        borderWidth: 1
-                    }
-                    ]
-                },
-                options: {
-                    title: {
-                        display: true,
-                        text: 'Confirmed Cases in America'
-                    }
-                }
-                });
-            }
-            
-            function getData() {
-                const response = fetch('https://api.covid19api.com/total/country/united-states/status/confirmed');
-                var data_us = response.json();
-                const dates = [];
-                const cases = [];
-            
-                Object.entries(data_us).forEach(([key, value]) => {
-                    if(key == "Date")
-                    {
-                        dates.push(value.substring(5,10));
-                    }
-                    else if(key == "Cases")
-                    {
-                        cases.push([value]);
-                    }
-                });
-                return {dates, cases};
-            }
-        </script> -->
     </div>
 </div>
