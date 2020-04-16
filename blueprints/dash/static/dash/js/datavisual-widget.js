@@ -17,7 +17,7 @@ async function setup2() {
           data: World.cases_active,
           borderColor: 'rgba(255, 99, 132, 1)',
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          borderWidth: 1
+          borderWidth: 2
         }
       ]
     },
@@ -34,8 +34,7 @@ async function setup2() {
 
 //get data from csv
 async function getData2() {
-  console.log('getdata');
-
+  //console.log('getdata');
   const data_all = await fetchURLs();
   var data_confirmed = data_all[0];
   var data_recovered = data_all[1];
@@ -64,21 +63,23 @@ async function getData2() {
   for (var i = 0; i < rows_after_two.length; ++i) {
     const cols = rows_after_two[i].split(',');
     const cols2 = rat_death[i].split(',');
-    //FIX LATER
-    //const cols3 = rat_recovered[i].split(',');
-
     for (var j = 4; j < cols.length; ++j) {
-      let push_val = parseInt(cols[j]) - parseInt(cols2[j]);// - parseInt(cols2[j]);
+      let push_val = parseInt(cols[j]) - parseInt(cols2[j]);
       cases_active[j] += push_val;
     }
+  }
 
+  for (var i = 0; i < rat_recovered.length; ++i) {
+    const cols3 = rat_recovered[i].split(',');
+    for (var j = 4; j < cols3.length; ++j){
+      cases_active[j] -= parseInt(cols3[j]);
+    }
   }
   return { dates, cases_active };
 }
 
 async function fetchURLs() {
-  console.log('fetchURLs');
-
+  //console.log('fetchURLs');
   try {
     // Promise.all() lets us coalesce multiple promises into a single super-promise
     var data = await Promise.all([
